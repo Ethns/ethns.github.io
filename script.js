@@ -63,17 +63,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function draw() {
     current.forEach(index => {
-      if (squares[currentPosition + index]) {
-        squares[currentPosition + index].classList.add("tetromino");
-      }
+      const target = currentPosition + index;
+      if (squares[target]) squares[target].classList.add("tetromino");
     });
   }
 
   function undraw() {
     current.forEach(index => {
-      if (squares[currentPosition + index]) {
-        squares[currentPosition + index].classList.remove("tetromino");
-      }
+      const target = currentPosition + index;
+      if (squares[target]) squares[target].classList.remove("tetromino");
     });
   }
 
@@ -81,31 +79,47 @@ document.addEventListener("DOMContentLoaded", () => {
     return squares[pos] && squares[pos].classList.contains("taken");
   }
 
+  function isValidPosition(pos, shape) {
+    return shape.every(index => {
+      const target = pos + index;
+      const col = target % width;
+      return (
+        target >= 0 &&
+        target < squares.length &&
+        !isTaken(target) &&
+        col >= 0 &&
+        col < width
+      );
+    });
+  }
+
   function moveDown() {
     if (!timerId) return;
     undraw();
-    if (!current.some(index => isTaken(currentPosition + index + width))) {
-      currentPosition += width;
+    const newPosition = currentPosition + width;
+    if (isValidPosition(newPosition, current)) {
+      currentPosition = newPosition;
+      draw();
     } else {
+      draw(); // 重新绘制当前位置
       freeze();
     }
-    draw();
   }
 
   function moveLeft() {
     undraw();
-    const isAtLeft = current.some(index => (currentPosition + index) % width === 0);
-    if (!isAtLeft && !current.some(index => isTaken(currentPosition + index - 1))) {
-      currentPosition--;
+    const newPosition = currentPosition - 1;
+    if (isValidPosition(newPosition, current)) {
+      currentPosition = newPosition;
     }
     draw();
   }
 
   function moveRight() {
     undraw();
-    const isAtRight = current.some(index => (currentPosition + index) % width === width - 1);
-    if (!isAtRight && !current.some(index => isTaken(currentPosition + index + 1))) {
-      currentPosition++;
+    const newPosition = currentPosition + 1;
+    if (isValidPosition(newPosition, current)) {
+      currentPosition = newPosition;
     }
     draw();
   }
@@ -114,12 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
     undraw();
     const nextRotation = (currentRotation + 1) % 4;
     const next = tetrominoes[random][nextRotation];
-    const hitsWall = next.some(index => {
-      const pos = currentPosition + index;
-      return pos < 0 || pos >= squares.length || squares[pos].classList.contains("taken");
-    });
-
-    if (!hitsWall) {
+    if (isValidPosition(currentPosition, next)) {
       currentRotation = nextRotation;
       current = next;
     }
@@ -127,7 +136,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function freeze() {
-    current.forEach(index => squares[currentPosition + index].classList.add("taken"));
+    current.forEach(index => {
+      squares[currentPosition + index].classList.add("taken");
+    });
     random = Math.floor(Math.random() * tetrominoes.length);
     currentRotation = 0;
     current = tetrominoes[random][currentRotation];
@@ -169,15 +180,16 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (e.key === "ArrowUp") rotate();
   }
 
+  // 键盘控制
   document.addEventListener("keydown", handleKeyPress);
 
-  // ✅ 绑定移动按钮事件
+  // 移动端按钮控制
   leftBtn.addEventListener("click", moveLeft);
   rightBtn.addEventListener("click", moveRight);
   rotateBtn.addEventListener("click", rotate);
   downBtn.addEventListener("click", moveDown);
 
-  // ✅ 开始 / 暂停按钮
+  // 开始/暂停按钮
   startBtn.addEventListener("click", () => {
     if (timerId) {
       clearInterval(timerId);
