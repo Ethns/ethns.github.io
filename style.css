@@ -1,0 +1,41 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #111;
+  color: white;
+}
+
+.game-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#grid {
+  width: 200px;
+  height: 400px;
+  display: grid;
+  grid-template-columns: repeat(10, 20px);
+  grid-template-rows: repeat(20, 20px);
+  border: 2px solid white;
+  background: #222;
+}
+
+.square {
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+}
+
+.tetromino {
+  background-color: #0ff;
+}
+
+.taken {
+  background-color: #999;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px;
+}
