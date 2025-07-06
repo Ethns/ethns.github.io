@@ -71,6 +71,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function isTaken(pos) {
+    return squares[pos] && squares[pos].classList.contains("taken");
+  }
+
   function moveDown() {
     if (!timerId) return;
     undraw();
@@ -82,13 +86,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function isTaken(pos) {
-    return squares[pos] && squares[pos].classList.contains("taken");
-  }
-
   function freeze() {
     current.forEach(index => squares[currentPosition + index].classList.add("taken"));
-    // new tetromino
+    // 新方块
     random = Math.floor(Math.random() * tetrominoes.length);
     currentRotation = 0;
     current = tetrominoes[random][currentRotation];
@@ -98,37 +98,37 @@ document.addEventListener("DOMContentLoaded", () => {
     gameOver();
   }
 
-  window.moveLeft = function () {
+  function moveLeft() {
     undraw();
     const isAtLeft = current.some(index => (currentPosition + index) % width === 0);
     if (!isAtLeft && !current.some(index => isTaken(currentPosition + index - 1))) {
       currentPosition--;
     }
     draw();
-  };
+  }
 
-  window.moveRight = function () {
+  function moveRight() {
     undraw();
     const isAtRight = current.some(index => (currentPosition + index) % width === width - 1);
     if (!isAtRight && !current.some(index => isTaken(currentPosition + index + 1))) {
       currentPosition++;
     }
     draw();
-  };
+  }
 
-  window.rotate = function () {
+  function rotate() {
     undraw();
     let nextRotation = (currentRotation + 1) % 4;
     let next = tetrominoes[random][nextRotation];
-    // check rotation will stay in bounds
     const isOutOfLeft = next.some(index => (currentPosition + index) % width === width - 1);
     const isOutOfRight = next.some(index => (currentPosition + index) % width === 0);
-    if (!isOutOfLeft && !isOutOfRight && !next.some(index => isTaken(currentPosition + index))) {
+    const hitsTaken = next.some(index => isTaken(currentPosition + index));
+    if (!isOutOfLeft && !isOutOfRight && !hitsTaken) {
       currentRotation = nextRotation;
       current = next;
     }
     draw();
-  };
+  }
 
   function control(e) {
     if (e.key === "ArrowLeft") moveLeft();
@@ -173,4 +173,10 @@ document.addEventListener("DOMContentLoaded", () => {
       timerId = null;
     }
   }
+
+  // 👇 绑定移动控制按钮（适配移动端）
+  document.getElementById("left-btn").addEventListener("click", moveLeft);
+  document.getElementById("right-btn").addEventListener("click", moveRight);
+  document.getElementById("rotate-btn").addEventListener("click", rotate);
+  document.getElementById("down-btn").addEventListener("click", moveDown);
 });
