@@ -2,6 +2,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const grid = document.querySelector("#grid");
   const scoreDisplay = document.querySelector("#score");
   const startBtn = document.querySelector("#start-button");
+  const leftBtn = document.getElementById("left-btn");
+  const rightBtn = document.getElementById("right-btn");
+  const rotateBtn = document.getElementById("rotate-btn");
+  const downBtn = document.getElementById("down-btn");
 
   const width = 10;
   let squares = [];
@@ -12,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     squares.push(div);
   }
 
-  let timerId;
+  let timerId = null;
   let score = 0;
   let currentPosition = 4;
   let currentRotation = 0;
@@ -59,15 +63,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function draw() {
     current.forEach(index => {
-      if (squares[currentPosition + index])
+      if (squares[currentPosition + index]) {
         squares[currentPosition + index].classList.add("tetromino");
+      }
     });
   }
 
   function undraw() {
     current.forEach(index => {
-      if (squares[currentPosition + index])
+      if (squares[currentPosition + index]) {
         squares[currentPosition + index].classList.remove("tetromino");
+      }
     });
   }
 
@@ -80,22 +86,10 @@ document.addEventListener("DOMContentLoaded", () => {
     undraw();
     if (!current.some(index => isTaken(currentPosition + index + width))) {
       currentPosition += width;
-      draw();
     } else {
       freeze();
     }
-  }
-
-  function freeze() {
-    current.forEach(index => squares[currentPosition + index].classList.add("taken"));
-    // 新方块
-    random = Math.floor(Math.random() * tetrominoes.length);
-    currentRotation = 0;
-    current = tetrominoes[random][currentRotation];
-    currentPosition = 4;
     draw();
-    addScore();
-    gameOver();
   }
 
   function moveLeft() {
@@ -118,36 +112,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function rotate() {
     undraw();
-    let nextRotation = (currentRotation + 1) % 4;
-    let next = tetrominoes[random][nextRotation];
-    const isOutOfLeft = next.some(index => (currentPosition + index) % width === width - 1);
-    const isOutOfRight = next.some(index => (currentPosition + index) % width === 0);
-    const hitsTaken = next.some(index => isTaken(currentPosition + index));
-    if (!isOutOfLeft && !isOutOfRight && !hitsTaken) {
+    const nextRotation = (currentRotation + 1) % 4;
+    const next = tetrominoes[random][nextRotation];
+    const hitsWall = next.some(index => {
+      const pos = currentPosition + index;
+      return pos < 0 || pos >= squares.length || squares[pos].classList.contains("taken");
+    });
+
+    if (!hitsWall) {
       currentRotation = nextRotation;
       current = next;
     }
     draw();
   }
 
-  function control(e) {
-    if (e.key === "ArrowLeft") moveLeft();
-    else if (e.key === "ArrowRight") moveRight();
-    else if (e.key === "ArrowDown") moveDown();
-    else if (e.key === "ArrowUp") rotate();
+  function freeze() {
+    current.forEach(index => squares[currentPosition + index].classList.add("taken"));
+    random = Math.floor(Math.random() * tetrominoes.length);
+    currentRotation = 0;
+    current = tetrominoes[random][currentRotation];
+    currentPosition = 4;
+    draw();
+    addScore();
+    gameOver();
   }
-
-  document.addEventListener("keydown", control);
-
-  startBtn.addEventListener("click", () => {
-    if (timerId) {
-      clearInterval(timerId);
-      timerId = null;
-    } else {
-      draw();
-      timerId = setInterval(moveDown, 500);
-    }
-  });
 
   function addScore() {
     for (let i = 0; i < 199; i += width) {
@@ -174,9 +162,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // 👇 绑定移动控制按钮（适配移动端）
-  document.getElementById("left-btn").addEventListener("click", moveLeft);
-  document.getElementById("right-btn").addEventListener("click", moveRight);
-  document.getElementById("rotate-btn").addEventListener("click", rotate);
-  document.getElementById("down-btn").addEventListener("click", moveDown);
+  function handleKeyPress(e) {
+    if (e.key === "ArrowLeft") moveLeft();
+    else if (e.key === "ArrowRight") moveRight();
+    else if (e.key === "ArrowDown") moveDown();
+    else if (e.key === "ArrowUp") rotate();
+  }
+
+  document.addEventListener("keydown", handleKeyPress);
+
+  // ✅ 绑定移动按钮事件
+  leftBtn.addEventListener("click", moveLeft);
+  rightBtn.addEventListener("click", moveRight);
+  rotateBtn.addEventListener("click", rotate);
+  downBtn.addEventListener("click", moveDown);
+
+  // ✅ 开始 / 暂停按钮
+  startBtn.addEventListener("click", () => {
+    if (timerId) {
+      clearInterval(timerId);
+      timerId = null;
+    } else {
+      draw();
+      timerId = setInterval(moveDown, 500);
+    }
+  });
 });
