@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,9 +12,17 @@
     <div id="grid"></div>
     <div class="info">
       <p>得分: <span id="score">0</span></p>
-      <button id="start-button">开始游戏</button>
+      <button id="start-button">开始 / 暂停</button>
     </div>
   </div>
+
+  <div class="controls">
+    <button onclick="moveLeft()">⬅️</button>
+    <button onclick="rotate()">🔄</button>
+    <button onclick="moveRight()">➡️</button>
+    <button onclick="moveDown()">⬇️</button>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>

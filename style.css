@@ -16,7 +16,6 @@ body {
   height: 400px;
   display: grid;
   grid-template-columns: repeat(10, 20px);
-  grid-template-rows: repeat(20, 20px);
   border: 2px solid white;
   background: #222;
 }
@@ -36,6 +35,11 @@ body {
 }
 
 button {
-  margin-top: 10px;
-  padding: 10px;
+  margin: 5px;
+  padding: 10px 15px;
+  font-size: 16px;
+}
+
+.controls {
+  margin-top: 20px;
 }
