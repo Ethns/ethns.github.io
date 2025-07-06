@@ -93,18 +93,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function moveDown() {
-    if (!timerId) return;
-    undraw();
-    const newPosition = currentPosition + width;
-    if (isValidPosition(newPosition, current)) {
-      currentPosition = newPosition;
-      draw();
-    } else {
-      draw(); // 重新绘制当前位置
-      freeze();
-    }
-  }
+function moveDown() {
+  if (!timerId) return;
+  undraw();
+  currentPosition += width;
+  draw();
+  freeze(); // 让 freeze() 自己判断是否到底
+}
+
 
   function moveLeft() {
     undraw();
@@ -135,18 +131,29 @@ document.addEventListener("DOMContentLoaded", () => {
     draw();
   }
 
-  function freeze() {
-    current.forEach(index => {
-      squares[currentPosition + index].classList.add("taken");
-    });
+function freeze() {
+  const willTouch = current.some(index => {
+    const below = currentPosition + index + width;
+    return below >= squares.length || squares[below].classList.contains("taken");
+  });
+
+  if (willTouch) {
+    current.forEach(index =>
+      squares[currentPosition + index].classList.add("taken")
+    );
+
+    // 生成新方块
     random = Math.floor(Math.random() * tetrominoes.length);
     currentRotation = 0;
     current = tetrominoes[random][currentRotation];
     currentPosition = 4;
+
     draw();
     addScore();
     gameOver();
   }
+}
+
 
   function addScore() {
     for (let i = 0; i < 199; i += width) {
