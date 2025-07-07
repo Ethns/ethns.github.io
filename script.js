@@ -79,26 +79,20 @@ document.addEventListener("DOMContentLoaded", () => {
     return squares[pos] && squares[pos].classList.contains("taken");
   }
 
-  function isValidPosition(pos, shape) {
+  function isInside(pos, shape) {
     return shape.every(index => {
-      const target = pos + index;
-      const col = target % width;
-      const row = Math.floor(target / width);
+      const abs = pos + index;
+      const col = abs % width;
+      const row = Math.floor(abs / width);
+      const origCol = (index + pos) % width;
       return (
-        target >= 0 &&
-        target < squares.length &&
+        abs >= 0 &&
+        abs < 200 &&
         col >= 0 &&
         col < width &&
-        !isTaken(target)
+        !isTaken(abs) &&
+        Math.floor((pos + index) / width) === row
       );
-    });
-  }
-
-  function checkEdgeCollision(pos, shape) {
-    return shape.every(index => {
-      const target = pos + index;
-      const col = target % width;
-      return col >= 0 && col < width;
     });
   }
 
@@ -113,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function moveLeft() {
     undraw();
     const newPosition = currentPosition - 1;
-    if (isValidPosition(newPosition, current) && checkEdgeCollision(newPosition, current)) {
+    if (isInside(newPosition, current)) {
       currentPosition = newPosition;
     }
     draw();
@@ -122,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function moveRight() {
     undraw();
     const newPosition = currentPosition + 1;
-    if (isValidPosition(newPosition, current) && checkEdgeCollision(newPosition, current)) {
+    if (isInside(newPosition, current)) {
       currentPosition = newPosition;
     }
     draw();
@@ -132,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     undraw();
     const nextRotation = (currentRotation + 1) % 4;
     const next = tetrominoes[random][nextRotation];
-    if (isValidPosition(currentPosition, next) && checkEdgeCollision(currentPosition, next)) {
+    if (isInside(currentPosition, next)) {
       currentRotation = nextRotation;
       current = next;
     }
@@ -142,18 +136,19 @@ document.addEventListener("DOMContentLoaded", () => {
   function freeze() {
     const willTouch = current.some(index => {
       const below = currentPosition + index + width;
-      return below >= squares.length || squares[below].classList.contains("taken");
+      return below >= 200 || squares[below].classList.contains("taken");
     });
 
     if (willTouch) {
-      current.forEach(index => {
-        squares[currentPosition + index].classList.add("taken");
-      });
+      current.forEach(index =>
+        squares[currentPosition + index].classList.add("taken")
+      );
 
       random = Math.floor(Math.random() * tetrominoes.length);
       currentRotation = 0;
       current = tetrominoes[random][currentRotation];
       currentPosition = 4;
+
       draw();
       addScore();
       gameOver();
