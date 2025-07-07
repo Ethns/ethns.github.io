@@ -5,25 +5,25 @@
 html, body {
   margin: 0;
   padding: 0;
+  font-family: Arial, sans-serif;
   background: #111;
   color: white;
-  font-family: Arial, sans-serif;
   height: 100%;
   overflow: hidden;
 }
 
-/* 页面主布局 */
-.container {
+.page {
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
 }
 
-/* 顶部控制栏 */
+/* 顶部按钮和分数 */
 .top-controls {
   text-align: center;
   padding: 10px 0;
+  flex-shrink: 0;
 }
 
 .top-controls h1 {
@@ -34,28 +34,34 @@ html, body {
 #start-button {
   padding: 10px 20px;
   font-size: 16px;
-  margin-top: 5px;
+  margin: 6px 0;
 }
 
-/* 游戏区域 */
+/* 游戏主区域 */
 .game-area {
   flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 100px; /* 给底部按钮留空间 */
+  overflow: hidden;
+  padding: 0 10px;
 }
 
-#grid {
+.game-wrapper {
+  width: 90vw;
+  max-height: calc(100vh - 200px); /* 自动适应视口 */
+  aspect-ratio: 10 / 20;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  aspect-ratio: 10 / 20;
-  width: min(90vw, 80vh); /* 保证瘦高但不撑满 */
-  background-color: #222;
   border: 2px solid white;
+  background: #222;
 }
 
-/* 单元格 */
+/* 单元格方块 */
+#grid {
+  display: contents;
+}
+
 .square {
   aspect-ratio: 1 / 1;
   background-color: #111;
@@ -69,19 +75,18 @@ html, body {
   background-color: #999;
 }
 
-/* 操作按钮栏 */
+/* 底部按钮栏 */
 .controls {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
+  height: 100px;
   background: #000;
   display: flex;
   justify-content: space-around;
   padding: 14px 8px;
-  height: 100px;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
-  z-index: 1000;
+  z-index: 100;
 }
 
 .controls button {
@@ -100,7 +105,7 @@ html, body {
   background: #555;
 }
 
-/* 响应式微调 */
+/* 小屏适配 */
 @media (max-width: 600px) {
   .top-controls h1 {
     font-size: 18px;
