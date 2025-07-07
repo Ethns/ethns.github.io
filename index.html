@@ -2,26 +2,28 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>俄罗斯方块</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>俄罗斯方块</h1>
-  <div class="top-controls">
-    <button id="start-button">开始 / 暂停</button>
-    <p>得分: <span id="score">0</span></p>
-  </div>
+  <div class="container">
+    <header class="top-controls">
+      <h1>俄罗斯方块</h1>
+      <button id="start-button">开始 / 暂停</button>
+      <p>得分: <span id="score">0</span></p>
+    </header>
 
-  <div class="game-container">
-    <div id="grid"></div>
-  </div>
+    <main class="game-area">
+      <div id="grid"></div>
+    </main>
 
-  <div class="controls">
-    <button id="left-btn">⬅️</button>
-    <button id="rotate-btn">🔄</button>
-    <button id="right-btn">➡️</button>
-    <button id="down-btn">⬇️</button>
+    <footer class="controls">
+      <button id="left-btn">⬅️</button>
+      <button id="rotate-btn">🔄</button>
+      <button id="right-btn">➡️</button>
+      <button id="down-btn">⬇️</button>
+    </footer>
   </div>
 
   <script src="script.js"></script>
