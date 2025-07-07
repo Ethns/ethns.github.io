@@ -38,17 +38,18 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-bottom: 120px; /* 留出空间给底部按钮 */
+  padding-bottom: 120px; /* 留出底部按钮空间 */
+  overflow: hidden;
 }
 
 #grid {
-  width: 90vmin;
-  height: 180vmin;
-  max-width: 100%;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
+  width: 90vmin; /* 保证方块总是正方形 */
+  aspect-ratio: 10 / 20; /* 高度自动适应为 2 倍宽度 */
   background-color: #222;
   border: 2px solid white;
+  max-height: calc(100vh - 180px); /* 避免超过屏幕总高度 */
 }
 
 .square {
