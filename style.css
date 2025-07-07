@@ -1,35 +1,50 @@
-/* 通用样式 */
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   background: #111;
   color: white;
+  font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 h1 {
   text-align: center;
-  margin: 10px 0;
+  margin: 10px 0 5px;
+  font-size: 24px;
 }
 
+/* 顶部按钮与分数 */
+.top-controls {
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+#start-button {
+  padding: 12px 24px;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+/* 游戏区域横向居中 */
 .game-container {
   flex-grow: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 10px;
-  box-sizing: border-box;
+  align-items: flex-start;
+  padding-bottom: 120px; /* 留出空间给底部按钮 */
 }
 
-/* 游戏网格 */
 #grid {
   width: 90vmin;
   height: 180vmin;
-  max-width: 90vw;
-  max-height: 90vh;
+  max-width: 100%;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   background-color: #222;
@@ -38,7 +53,7 @@ h1 {
 
 .square {
   aspect-ratio: 1 / 1;
-  box-sizing: border-box;
+  background-color: #111;
 }
 
 .tetromino {
@@ -49,57 +64,49 @@ h1 {
   background-color: #999;
 }
 
-/* 分数和按钮区域 */
-.info {
-  margin-left: 20px;
-  text-align: left;
-}
-
-#start-button {
-  padding: 10px 20px;
-  margin-top: 10px;
-  font-size: 16px;
-}
-
-/* 控制按钮区（底部固定） */
+/* 固定在屏幕底部的按钮组 */
 .controls {
   position: fixed;
   bottom: 0;
   left: 0;
-  width: 100%;
+  right: 0;
   background: #000;
   display: flex;
   justify-content: space-around;
-  padding: 10px 0;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  padding: 16px 10px;
+  z-index: 999;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
 }
 
 .controls button {
-  font-size: 24px;
-  padding: 15px 25px;
-  border: none;
+  flex: 1;
+  margin: 0 5px;
+  font-size: 28px;
+  padding: 18px 0;
   background: #333;
   color: white;
+  border: none;
   border-radius: 8px;
-  flex-grow: 1;
-  margin: 0 5px;
-  max-width: 80px;
   touch-action: manipulation;
 }
 
 .controls button:active {
-  background: #555;
+  background: #666;
 }
 
-/* 响应式字体 */
+/* 小屏设备适配 */
 @media (max-width: 600px) {
-  .controls button {
+  h1 {
     font-size: 20px;
-    padding: 12px;
   }
 
   #start-button {
-    font-size: 14px;
+    font-size: 16px;
+    padding: 10px 20px;
+  }
+
+  .controls button {
+    font-size: 24px;
+    padding: 16px 0;
   }
 }
