@@ -83,29 +83,37 @@ document.addEventListener("DOMContentLoaded", () => {
     return shape.every(index => {
       const target = pos + index;
       const col = target % width;
+      const row = Math.floor(target / width);
       return (
         target >= 0 &&
         target < squares.length &&
-        !isTaken(target) &&
         col >= 0 &&
-        col < width
+        col < width &&
+        !isTaken(target)
       );
     });
   }
 
-function moveDown() {
-  if (!timerId) return;
-  undraw();
-  currentPosition += width;
-  draw();
-  freeze(); // 让 freeze() 自己判断是否到底
-}
+  function checkEdgeCollision(pos, shape) {
+    return shape.every(index => {
+      const target = pos + index;
+      const col = target % width;
+      return col >= 0 && col < width;
+    });
+  }
 
+  function moveDown() {
+    if (!timerId) return;
+    undraw();
+    currentPosition += width;
+    draw();
+    freeze();
+  }
 
   function moveLeft() {
     undraw();
     const newPosition = currentPosition - 1;
-    if (isValidPosition(newPosition, current)) {
+    if (isValidPosition(newPosition, current) && checkEdgeCollision(newPosition, current)) {
       currentPosition = newPosition;
     }
     draw();
@@ -114,7 +122,7 @@ function moveDown() {
   function moveRight() {
     undraw();
     const newPosition = currentPosition + 1;
-    if (isValidPosition(newPosition, current)) {
+    if (isValidPosition(newPosition, current) && checkEdgeCollision(newPosition, current)) {
       currentPosition = newPosition;
     }
     draw();
@@ -124,36 +132,33 @@ function moveDown() {
     undraw();
     const nextRotation = (currentRotation + 1) % 4;
     const next = tetrominoes[random][nextRotation];
-    if (isValidPosition(currentPosition, next)) {
+    if (isValidPosition(currentPosition, next) && checkEdgeCollision(currentPosition, next)) {
       currentRotation = nextRotation;
       current = next;
     }
     draw();
   }
 
-function freeze() {
-  const willTouch = current.some(index => {
-    const below = currentPosition + index + width;
-    return below >= squares.length || squares[below].classList.contains("taken");
-  });
+  function freeze() {
+    const willTouch = current.some(index => {
+      const below = currentPosition + index + width;
+      return below >= squares.length || squares[below].classList.contains("taken");
+    });
 
-  if (willTouch) {
-    current.forEach(index =>
-      squares[currentPosition + index].classList.add("taken")
-    );
+    if (willTouch) {
+      current.forEach(index => {
+        squares[currentPosition + index].classList.add("taken");
+      });
 
-    // 生成新方块
-    random = Math.floor(Math.random() * tetrominoes.length);
-    currentRotation = 0;
-    current = tetrominoes[random][currentRotation];
-    currentPosition = 4;
-
-    draw();
-    addScore();
-    gameOver();
+      random = Math.floor(Math.random() * tetrominoes.length);
+      currentRotation = 0;
+      current = tetrominoes[random][currentRotation];
+      currentPosition = 4;
+      draw();
+      addScore();
+      gameOver();
+    }
   }
-}
-
 
   function addScore() {
     for (let i = 0; i < 199; i += width) {
@@ -187,16 +192,12 @@ function freeze() {
     else if (e.key === "ArrowUp") rotate();
   }
 
-  // 键盘控制
   document.addEventListener("keydown", handleKeyPress);
-
-  // 移动端按钮控制
   leftBtn.addEventListener("click", moveLeft);
   rightBtn.addEventListener("click", moveRight);
   rotateBtn.addEventListener("click", rotate);
   downBtn.addEventListener("click", moveDown);
 
-  // 开始/暂停按钮
   startBtn.addEventListener("click", () => {
     if (timerId) {
       clearInterval(timerId);
