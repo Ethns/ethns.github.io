@@ -202,4 +202,14 @@ document.addEventListener("DOMContentLoaded", () => {
       timerId = setInterval(moveDown, 500);
     }
   });
+  function adjustGridHeight() {
+    const grid = document.getElementById('grid');
+    const top = document.querySelector('.top-controls').offsetHeight;
+    const bottom = document.querySelector('.controls').offsetHeight;
+    const available = window.innerHeight - top - bottom - 20;
+    grid.style.height = available + 'px';
+  }
+  window.addEventListener('resize', adjustGridHeight);
+  window.addEventListener('load', adjustGridHeight);
+
 });
