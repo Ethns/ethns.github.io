@@ -19,14 +19,30 @@ body {
 #game-container {
   width: 280px;
   height: 420px;
-  background: #111;
+  background: #222;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(20, 1fr);
   gap: 1px;
   margin-top: 20px;
+  margin-right: 20px;
 }
-
+#game-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-left: 10px;
+}
+#game-side {
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#start-pause {
+  margin-top: 20px;
+  width: 100%;
+}
 .cell {
   width: 100%;
   aspect-ratio: 1 / 1;
