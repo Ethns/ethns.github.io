@@ -23,7 +23,7 @@ body {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(20, 1fr);
-  gap: 1px;
+  gap: 0px;
   margin-top: 20px;
   margin-right: 20px;
 }
@@ -47,6 +47,7 @@ body {
   width: 100%;
   aspect-ratio: 1 / 1;
   background: #222;
+  border: 1px solid #222;
 }
 
 .filled {
