@@ -48,16 +48,16 @@ html, body {
 }
 
 .game-wrapper {
-  width: 90vw;
-  max-height: calc(100vh - 200px); /* 自动适应视口 */
+  width: 70vw; /* 缩小宽度以减小整体大小 */
+  max-height: calc(100vh - 200px); /* 留出按钮空间 */
   aspect-ratio: 10 / 20;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
+  background-color: #222;
   border: 2px solid white;
-  background: #222;
+  overflow: hidden;
 }
 
-/* 单元格方块 */
 #grid {
   display: contents;
 }
@@ -65,6 +65,7 @@ html, body {
 .square {
   aspect-ratio: 1 / 1;
   background-color: #111;
+  border: 1px solid #222; /* 更清晰地分隔方块 */
 }
 
 .tetromino {
