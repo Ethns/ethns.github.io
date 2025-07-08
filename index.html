@@ -2,26 +2,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>俄罗斯方块</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     #game-wrapper {
       display: flex;
       flex-direction: row;
       align-items: flex-start;
-      gap: 10px;
+      margin-left: 10px;
+    }
+    #game-container {
+      margin-right: 20px;
     }
     #game-side {
+      width: 80px;
       display: flex;
       flex-direction: column;
+      align-items: center;
     }
     #start-pause {
       margin-top: 20px;
+      width: 100%;
     }
   </style>
 </head>
 <body>
-  <h2>俄罗斯方块</h2>
-  <div id="game-wrapper">
+    <div id="game-wrapper">
     <div id="game-container"></div>
     <div id="game-side">
       <button id="start-pause">开始</button>
