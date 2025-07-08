@@ -1,10 +1,11 @@
-/* style.css */
 * {
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
   padding: 0;
+  padding-bottom: 100px; /* 为底部按钮留出空间 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,16 +35,23 @@ body {
 .filled {
   background: #0af;
 }
+
 .locked {
   background: #555;
 }
 
 #controls {
-  margin-top: 10px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #222;
+  padding: 10px 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
+  z-index: 10;
 }
 
 button {
