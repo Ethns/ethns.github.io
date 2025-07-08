@@ -1,33 +1,20 @@
-<!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>俄罗斯方块</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>纯前端俄罗斯方块</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="page">
-    <header class="top-controls">
-      <h1>俄罗斯方块</h1>
-      <button id="start-button">开始 / 暂停</button>
-      <p>得分: <span id="score">0</span></p>
-    </header>
-
-    <main class="game-area">
-      <div class="game-wrapper">
-        <div id="grid"></div>
-      </div>
-    </main>
-
-    <footer class="controls">
-      <button id="left-btn">⬅️</button>
-      <button id="rotate-btn">🔄</button>
-      <button id="right-btn">➡️</button>
-      <button id="down-btn">⬇️</button>
-    </footer>
-
-    <script src="script.js"></script>
+  <h2>俄罗斯方块</h2>
+  <div id="game-container"></div>
+  <div id="controls">
+    <button id="start-pause">开始</button>
+    <button id="left">左移</button>
+    <button id="right">右移</button>
+    <button id="rotate">旋转</button>
+    <button id="down">加速下落</button>
   </div>
+  <script src="script.js"></script>
 </body>
 </html>
