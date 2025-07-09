@@ -64,10 +64,24 @@ const shapes = [
 
 let score = 0;
 const scoreBoard = document.getElementById('score-board');
+const timerDisplay = document.getElementById('timer');
+let seconds = 0;
+let timerInterval = null;
 
 function updateScore(linesCleared) {
   score += linesCleared * 10;
   scoreBoard.textContent = `分数: ${score}`;
+}
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    seconds++;
+    timerDisplay.textContent = `时间: ${seconds}s`;
+  }, 1000);
+}
+
+function pauseTimer() {
+  clearInterval(timerInterval);
 }
 
 for (let i = 0; i < cols * rows; i++) {
@@ -178,7 +192,8 @@ function spawnNew() {
   rotation = 0;
   if (!isValid(0, 0)) {
     alert('游戏结束');
-    pauseGame();
+    pauseGame();        // 停止自动下落
+    pauseTimer();       // 停止计时
     return;
   }
   drawShape();
@@ -186,21 +201,25 @@ function spawnNew() {
 
 function startGame() {
   if (!running) {
-    currentPos = { x: 4, y: 0 };
-    shapeIndex = 0;
-    rotation = 0;
-    drawShape();
-    interval = setInterval(() => {
-      tick();
-    }, 500);
+    if (interval === null) { // 初始游戏
+      currentPos = { x: 4, y: 0 };
+      shapeIndex = Math.floor(Math.random() * shapes.length);
+      rotation = 0;
+      drawShape();
+    }
+    interval = setInterval(() => tick(), 500);
+    startTimer(); // 启动计时器
     running = true;
   }
 }
 
 function pauseGame() {
   clearInterval(interval);
+  interval = null;
+  pauseTimer(); // 暂停计时器
   running = false;
 }
+
 
 document.getElementById('start-pause').addEventListener('click', () => {
   if (running) {
