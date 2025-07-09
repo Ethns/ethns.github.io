@@ -74,15 +74,20 @@ function updateScore(linesCleared) {
 }
 
 function startTimer() {
-  timerInterval = setInterval(() => {
-    seconds++;
-    timerDisplay.textContent = `时间: ${seconds}s`;
-  }, 1000);
+  if (timerInterval === null) {
+    timerInterval = setInterval(() => {
+      seconds++;
+      const timerDisplay = document.getElementById('timer');
+      timerDisplay.textContent = `时间: ${seconds}s`;
+    }, 1000);
+  }
 }
 
 function pauseTimer() {
   clearInterval(timerInterval);
+  timerInterval = null;
 }
+
 
 for (let i = 0; i < cols * rows; i++) {
   const cell = document.createElement('div');
@@ -192,8 +197,8 @@ function spawnNew() {
   rotation = 0;
   if (!isValid(0, 0)) {
     alert('游戏结束');
-    pauseGame();        // 停止自动下落
-    pauseTimer();       // 停止计时
+    pauseGame();
+    pauseTimer(); // 停止计时器
     return;
   }
   drawShape();
@@ -201,17 +206,18 @@ function spawnNew() {
 
 function startGame() {
   if (!running) {
-    if (interval === null) { // 初始游戏
+    if (interval === null) {
       currentPos = { x: 4, y: 0 };
       shapeIndex = Math.floor(Math.random() * shapes.length);
       rotation = 0;
       drawShape();
     }
     interval = setInterval(() => tick(), 500);
-    startTimer(); // 启动计时器
+    startTimer();  // 安全地启动
     running = true;
   }
 }
+
 
 function pauseGame() {
   clearInterval(interval);
