@@ -9,6 +9,7 @@ let currentShape = [];
 let currentPos = { x: 4, y: 0 };
 let shapeIndex = 0;
 let rotation = 0;
+let gameStarted = false;
 
 const shapes = [
   // I
@@ -206,7 +207,8 @@ function spawnNew() {
   if (!isValid(0, 0)) {
     alert('游戏结束');
     pauseGame();
-    pauseTimer(); // 停止计时器
+    pauseTimer();
+    gameStarted = false; // ✅ 游戏可以重新初始化
     return;
   }
   drawShape();
@@ -214,24 +216,33 @@ function spawnNew() {
 
 function startGame() {
   if (!running) {
-    if (interval === null) {
+    if (!gameStarted) {
       currentPos = { x: 4, y: 0 };
       shapeIndex = Math.floor(Math.random() * shapes.length);
       rotation = 0;
       drawShape();
+      gameStarted = true;
     }
     interval = setInterval(() => tick(), 500);
-    startTimer();  // 安全地启动
+    startTimer();
     running = true;
+    setControlButtons(true);
   }
 }
 
+function setControlButtons(enabled) {
+  const buttons = ['left', 'right', 'rotate', 'down'];
+  buttons.forEach(id => {
+    document.getElementById(id).disabled = !enabled;
+  });
+}
 
 function pauseGame() {
   clearInterval(interval);
   interval = null;
-  pauseTimer(); // 暂停计时器
+  pauseTimer();
   running = false;
+  setControlButtons(false); // ❗️禁用按钮
 }
 
 
