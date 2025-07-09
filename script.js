@@ -73,15 +73,23 @@ function updateScore(linesCleared) {
   scoreBoard.textContent = `分数: ${score}`;
 }
 
+function formatTime(seconds) {
+  const hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
+  const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+  const secs = String(seconds % 60).padStart(2, '0');
+  return `${hrs}:${mins}:${secs}`;
+}
+
 function startTimer() {
   if (timerInterval === null) {
     timerInterval = setInterval(() => {
       seconds++;
       const timerDisplay = document.getElementById('timer');
-      timerDisplay.textContent = `时间: ${seconds}s`;
+      timerDisplay.textContent = `时间: ${formatTime(seconds)}`;
     }, 1000);
   }
 }
+
 
 function pauseTimer() {
   clearInterval(timerInterval);
