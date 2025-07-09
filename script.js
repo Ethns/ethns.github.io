@@ -70,7 +70,7 @@ let timerInterval = null;
 
 function updateScore(linesCleared) {
   score += linesCleared * 10;
-  scoreBoard.textContent = `分数:<br>${score}`;
+  scoreBoard.textContent = `${score}`;
 }
 
 function formatTime(seconds) {
@@ -85,7 +85,7 @@ function startTimer() {
     timerInterval = setInterval(() => {
       seconds++;
       const timerDisplay = document.getElementById('timer');
-      timerDisplay.textContent = `时间:<br>${formatTime(seconds)}`;
+      timerDisplay.textContent = `${formatTime(seconds)}`;
     }, 1000);
   }
 }
