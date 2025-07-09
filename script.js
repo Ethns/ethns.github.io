@@ -62,6 +62,13 @@ const shapes = [
   ]
 ];
 
+let score = 0;
+const scoreBoard = document.getElementById('score-board');
+
+function updateScore(linesCleared) {
+  score += linesCleared * 10;
+  scoreBoard.textContent = `分数: ${score}`;
+}
 
 for (let i = 0; i < cols * rows; i++) {
   const cell = document.createElement('div');
@@ -130,6 +137,8 @@ function tick() {
 }
 
 function checkLines() {
+  let linesCleared = 0;
+
   for (let y = 0; y < rows; y++) {
     let full = true;
     for (let x = 0; x < cols; x++) {
@@ -138,19 +147,30 @@ function checkLines() {
         break;
       }
     }
+
     if (full) {
+      // 清除该行
       for (let x = 0; x < cols; x++) {
         grid[y * cols + x].classList.remove('locked');
       }
+
+      // 下移上方所有已锁定方块
       for (let i = y * cols - 1; i >= 0; i--) {
         if (grid[i].classList.contains('locked')) {
           grid[i].classList.remove('locked');
           grid[i + cols].classList.add('locked');
         }
       }
+
+      linesCleared++;
     }
   }
+
+  if (linesCleared > 0) {
+    updateScore(linesCleared);
+  }
 }
+
 
 function spawnNew() {
   currentPos = { x: 4, y: 0 };
