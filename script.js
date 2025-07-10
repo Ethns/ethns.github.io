@@ -297,6 +297,7 @@ document.getElementById('start-pause').addEventListener('click', () => {
   }
 });
 
+// 通用长按函数
 function attachLongPress(buttonId, actionFn) {
   const btn = document.getElementById(buttonId);
   let interval = null;
@@ -313,31 +314,14 @@ function attachLongPress(buttonId, actionFn) {
     interval = null;
   };
 
-  btn.addEventListener('mousedown', start);
-  btn.addEventListener('touchstart', start);
-
-  ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(evt => {
+  btn.addEventListener("mousedown", start);
+  btn.addEventListener("touchstart", start);
+  ["mouseup", "mouseleave", "touchend", "touchcancel"].forEach(evt => {
     btn.addEventListener(evt, stop);
   });
 }
-
 
 attachLongPress("left", () => move(-1, 0));
 attachLongPress("right", () => move(1, 0));
 attachLongPress("rotate", () => rotateShape());
 attachLongPress("down", () => tick());
-// 下落按钮 兼容鼠标 & 触屏
-downButton.addEventListener('mousedown', (e) => {
-  e.preventDefault();
-  if (running) startAutoDrop();
-});
-downButton.addEventListener('touchstart', (e) => {
-  e.preventDefault();
-  if (running) startAutoDrop();
-});
-
-['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(evt => {
-  downButton.addEventListener(evt, () => {
-    stopAutoDrop();
-  });
-});
