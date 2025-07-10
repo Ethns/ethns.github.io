@@ -296,10 +296,36 @@ document.getElementById('start-pause').addEventListener('click', () => {
     document.getElementById('start-pause').textContent = '暂停';
   }
 });
-document.getElementById('left').addEventListener('click', () => move(-1, 0));
-document.getElementById('right').addEventListener('click', () => move(1, 0));
-document.getElementById('rotate').addEventListener('click', () => rotateShape());
-document.getElementById('down').addEventListener('click', () => tick());
+
+function attachLongPress(buttonId, actionFn) {
+  const btn = document.getElementById(buttonId);
+  let interval = null;
+
+  const start = (e) => {
+    e.preventDefault();
+    if (!running) return;
+    actionFn();
+    interval = setInterval(actionFn, 100);
+  };
+
+  const stop = () => {
+    clearInterval(interval);
+    interval = null;
+  };
+
+  btn.addEventListener('mousedown', start);
+  btn.addEventListener('touchstart', start);
+
+  ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(evt => {
+    btn.addEventListener(evt, stop);
+  });
+}
+
+
+document.getElementById('left').attachLongPress('left', () => move(-1, 0));
+document.getElementById('right').attachLongPress('right', () => move(1, 0));
+document.getElementById('rotate').attachLongPress('rotate', () => rotateShape());
+document.getElementById('down').attachLongPress('down', () => tick());
 // 下落按钮 兼容鼠标 & 触屏
 downButton.addEventListener('mousedown', (e) => {
   e.preventDefault();

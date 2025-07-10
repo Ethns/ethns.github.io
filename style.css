@@ -87,7 +87,7 @@ button:hover {
   background: #555;
 }
 
-#down {
+#controls button {
   user-select: none;
   -webkit-user-select: none;
   touch-action: none;
