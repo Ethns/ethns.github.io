@@ -10,6 +10,7 @@ let currentPos = { x: 4, y: 0 };
 let shapeIndex = 0;
 let rotation = 0;
 let gameStarted = false;
+let gameOver = false;
 
 const shapes = [
   // I
@@ -204,15 +205,21 @@ function spawnNew() {
   currentPos = { x: 4, y: 0 };
   shapeIndex = Math.floor(Math.random() * shapes.length);
   rotation = 0;
+
   if (!isValid(0, 0)) {
     alert('游戏结束');
     pauseGame();
     pauseTimer();
-    gameStarted = false; // ✅ 游戏可以重新初始化
+    setControlButtons(false);
+    document.getElementById('start-pause').textContent = '重新开始';
+    gameStarted = false;
+    gameOver = true;  // 标记结束
     return;
   }
+
   drawShape();
 }
+
 
 function startGame() {
   if (!running) {
@@ -242,11 +249,31 @@ function pauseGame() {
   interval = null;
   pauseTimer();
   running = false;
-  setControlButtons(false); // ❗️禁用按钮
+  setControlButtons(false); // 禁用按钮
 }
 
+function resetGame() {
+  // 清除棋盘
+  grid.forEach(cell => {
+    cell.classList.remove('filled', 'locked');
+  });
+
+  score = 0;
+  seconds = 0;
+  gameOver = false;
+  gameStarted = false;
+  document.getElementById('score-board').innerHTML = '0';
+  document.getElementById('timer').innerHTML = '00:00:00';
+  document.getElementById('start-pause').textContent = '暂停';
+
+  startGame();
+}
 
 document.getElementById('start-pause').addEventListener('click', () => {
+  if (gameOver) {
+    resetGame(); // 重置游戏
+    return;
+  }
   if (running) {
     pauseGame();
     document.getElementById('start-pause').textContent = '开始';
