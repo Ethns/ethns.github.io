@@ -11,6 +11,10 @@ let shapeIndex = 0;
 let rotation = 0;
 let gameStarted = false;
 let gameOver = false;
+let downInterval = null;
+let score = 0;
+let seconds = 0;
+let timerInterval = null;
 
 const shapes = [
   // I
@@ -64,15 +68,25 @@ const shapes = [
   ]
 ];
 
-let score = 0;
+const downButton = document.getElementById('down');
 const scoreBoard = document.getElementById('score-board');
 const timerDisplay = document.getElementById('timer');
-let seconds = 0;
-let timerInterval = null;
 
 function updateScore(linesCleared) {
   score += linesCleared * 10;
   scoreBoard.textContent = `${score}`;
+}
+
+function startAutoDrop() {
+  tick(); // 立即触发一次
+  downInterval = setInterval(() => {
+    tick();
+  }, 100);
+}
+
+function stopAutoDrop() {
+  clearInterval(downInterval);
+  downInterval = null;
 }
 
 function formatTime(seconds) {
@@ -286,3 +300,18 @@ document.getElementById('left').addEventListener('click', () => move(-1, 0));
 document.getElementById('right').addEventListener('click', () => move(1, 0));
 document.getElementById('rotate').addEventListener('click', () => rotateShape());
 document.getElementById('down').addEventListener('click', () => tick());
+// 下落按钮 兼容鼠标 & 触屏
+downButton.addEventListener('mousedown', (e) => {
+  e.preventDefault();
+  if (running) startAutoDrop();
+});
+downButton.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  if (running) startAutoDrop();
+});
+
+['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(evt => {
+  downButton.addEventListener(evt, () => {
+    stopAutoDrop();
+  });
+});
