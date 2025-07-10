@@ -322,10 +322,10 @@ function attachLongPress(buttonId, actionFn) {
 }
 
 
-document.getElementById('left').attachLongPress('left', () => move(-1, 0));
-document.getElementById('right').attachLongPress('right', () => move(1, 0));
-document.getElementById('rotate').attachLongPress('rotate', () => rotateShape());
-document.getElementById('down').attachLongPress('down', () => tick());
+attachLongPress("left", () => move(-1, 0));
+attachLongPress("right", () => move(1, 0));
+attachLongPress("rotate", () => rotateShape());
+attachLongPress("down", () => tick());
 // 下落按钮 兼容鼠标 & 触屏
 downButton.addEventListener('mousedown', (e) => {
   e.preventDefault();
