@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>Socket.IO 连接测试</title>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+  <h1>Socket.IO 连接测试</h1>
+  <div id="status">🔌 正在连接中...</div>
+
+  <script>
+    const socket = io("https://ts-ke8i.onrender.com");
+
+    // 成功连接时
+    socket.on("connect", () => {
+      document.getElementById("status").innerText = `已连连接！Socket ID: ${socket.id}`;
+      console.log("已连接到服务器");
+    });
+
+    // 断开连接时
+    socket.on("disconnect", () => {
+      document.getElementById("status").innerText = "已断开连接";
+      console.warn("已断开连接");
+    });
+
+    // 连接出错
+    socket.on("connect_error", (err) => {
+      document.getElementById("status").innerText = `连接错误: ${err.message}`;
+      console.error("连接出错：", err);
+    });
+  </script>
+</body>
+</html>
