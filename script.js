@@ -309,9 +309,28 @@ document.addEventListener('DOMContentLoaded', () => {
     return getUsers().includes(name);
   }
 
+  // 准备连接web socket
+  const socket = io('https://ts-ke8i.onrender.com');
+  let currentUser = null;
+  let opponentName = null;
+  let roomId = null;
+  socket.on('matchFound', (data) => {
+    roomId = data.roomId;
+    opponentName = data.opponent;
+
+    console.log(`加入房间 ${roomId}，对手：${opponentName}`);
+
+    // 更新自己以及匹配到的玩家信息
+    const playerSelfUsername = document.getElementById('player-self-username');
+    const playerOpponentUsername = document.getElementById('player-opponent-username');
+    playerSelfUsername.innerHTML = `${currentUser}`
+    playerOpponentUsername.innerHTML = `${opponentName}`
+  });
+
   function showGameScreen() {
     loginScreen.style.display = 'none';
     gameScreen.style.display = 'block';
+    currentUser = localStorage.getItem('tetris_current_user');
     socket.emit('joinQueue', { name: currentUser });
   }
 
@@ -333,25 +352,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showGameScreen();
   }
 });
-
-// 准备连接web socket
-const socket = io('https://ts-ke8i.onrender.com');
-let currentUser = localStorage.getItem('tetris_current_user');
-let opponentName = null;
-let roomId = null;
-socket.on('matchFound', (data) => {
-  roomId = data.roomId;
-  opponentName = data.opponent;
-
-  console.log(`加入房间 ${roomId}，对手：${opponentName}`);
-
-  // 更新自己以及匹配到的玩家信息
-  const playerSelfUsername = document.getElementById('player-self-username');
-  const playerOpponentUsername = document.getElementById('player-opponent-username');
-  playerSelfUsername.innerHTML = `${currentUser}`
-  playerOpponentUsername.innerHTML = `${opponentName}`
-});
-
 
 document.getElementById('start-pause').addEventListener('click', () => {
   if (gameOver) {
