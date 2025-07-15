@@ -283,6 +283,7 @@ function resetGame() {
   startGame();
 }
 
+//登录逻辑
 document.addEventListener('DOMContentLoaded', () => {
   const loginScreen = document.getElementById('login-screen');
   const gameScreen = document.getElementById('game-screen');
@@ -311,6 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function showGameScreen() {
     loginScreen.style.display = 'none';
     gameScreen.style.display = 'block';
+    socket.emit('joinQueue', { name: currentUser });
   }
 
   loginButton.addEventListener('click', () => {
@@ -331,6 +333,26 @@ document.addEventListener('DOMContentLoaded', () => {
     showGameScreen();
   }
 });
+
+// 准备连接web socket
+const socket = io('https://ts-ke8i.onrender.com');
+let currentUser = localStorage.getItem('tetris_current_user');
+let opponentName = null;
+let roomId = null;
+socket.on('matchFound', (data) => {
+  roomId = data.roomId;
+  opponentName = data.opponent;
+
+  console.log(`✅ 加入房间 ${roomId}，对手：${opponentName}`);
+
+  // 假设你在 HTML 中有 <div id="player-names">
+  const namePanel = document.getElementById('player-names');
+  namePanel.innerHTML = `
+    <p>你：${currentUser}</p>
+    <p>对手：${opponentName}</p>
+  `;
+});
+
 
 document.getElementById('start-pause').addEventListener('click', () => {
   if (gameOver) {
