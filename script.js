@@ -343,14 +343,13 @@ socket.on('matchFound', (data) => {
   roomId = data.roomId;
   opponentName = data.opponent;
 
-  console.log(`✅ 加入房间 ${roomId}，对手：${opponentName}`);
+  console.log(`加入房间 ${roomId}，对手：${opponentName}`);
 
-  // 假设你在 HTML 中有 <div id="player-names">
-  const namePanel = document.getElementById('player-names');
-  namePanel.innerHTML = `
-    <p>你：${currentUser}</p>
-    <p>对手：${opponentName}</p>
-  `;
+  // 更新自己以及匹配到的玩家信息
+  const playerSelfUsername = document.getElementById('player-self-username');
+  const playerOpponentUsername = document.getElementById('player-opponent-username');
+  playerSelfUsername.innerHTML = `${currentUser}`
+  playerOpponentUsername.innerHTML = `${opponentName}`
 });
 
 
