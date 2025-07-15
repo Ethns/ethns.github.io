@@ -325,8 +325,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loginScreen.style.display = 'none';
     gameScreen.style.display = 'block';
     currentUser = localStorage.getItem(currentUserKey);
-    roomId = localStorage.getItem(currentRoomKey);
-    socket.emit('joinRoom', { name: currentUser, roomId });
+    currentRoomId = localStorage.getItem(currentRoomKey);
+    socket.emit('joinRoom', { name: currentUser, roomId: currentRoomId });
   }
 
   loginButton.addEventListener('click', () => {
