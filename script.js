@@ -283,6 +283,55 @@ function resetGame() {
   startGame();
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  const loginScreen = document.getElementById('login-screen');
+  const gameScreen = document.getElementById('game-screen');
+  const usernameInput = document.getElementById('username-input');
+  const loginButton = document.getElementById('login-button');
+  const loginError = document.getElementById('login-error');
+
+  const usersKey = 'tetris_users';
+  const currentUserKey = 'tetris_current_user';
+
+  function getUsers() {
+    return JSON.parse(localStorage.getItem(usersKey)) || [];
+  }
+
+  function addUser(name) {
+    const users = getUsers();
+    users.push(name);
+    localStorage.setItem(usersKey, JSON.stringify(users));
+    localStorage.setItem(currentUserKey, name);
+  }
+
+  function isNameTaken(name) {
+    return getUsers().includes(name);
+  }
+
+  function showGameScreen() {
+    loginScreen.style.display = 'none';
+    gameScreen.style.display = 'block';
+  }
+
+  loginButton.addEventListener('click', () => {
+    const name = usernameInput.value.trim();
+    if (!name) {
+      loginError.textContent = '用户名不能为空';
+    } else if (isNameTaken(name)) {
+      loginError.textContent = '该用户名已存在，请换一个';
+    } else {
+      addUser(name);
+      showGameScreen();
+    }
+  });
+
+  // 自动登录
+  const savedName = localStorage.getItem(currentUserKey);
+  if (savedName) {
+    showGameScreen();
+  }
+});
+
 document.getElementById('start-pause').addEventListener('click', () => {
   if (gameOver) {
     resetGame(); // 重置游戏
