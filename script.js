@@ -345,8 +345,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function showGameScreen() {
     loginScreen.style.display = 'none';
     gameScreen.style.display = 'block';
-    currentUser = localStorage.getItem('tetris_current_user');
-    roomId = localStorage.getItem('tetris_current_room');
+    currentUser = localStorage.getItem(currentUserKey);
+    roomId = localStorage.getItem(currentRoomKey);
     socket.emit('joinRoom', { currentUser, roomId });
   }
 
@@ -366,7 +366,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 自动登录
   const savedName = localStorage.getItem(currentUserKey);
-  if (savedName && room) {
+  const savedRoom = localStorage.getItem(currentRoomKey);
+  if (savedName && savedRoom) {
     showGameScreen();
   }
 });
