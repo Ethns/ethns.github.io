@@ -293,36 +293,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginError = document.getElementById('login-error');
 
   const currentUserKey = 'tetris_current_user';
-
-  function getUsers() {
-    return JSON.parse(localStorage.getItem(currentUserKey)) || [];
-  }
-
-  function addUser(name) {
-    const users = getUsers();
-    users.push(name);
-    localStorage.setItem(currentUserKey, name);
-  }
-
-  function isNameTaken(name) {
-    return getUsers().includes(name);
-  }
-
   const currentRoomKey = 'tetris_current_room';
-
-  function getRoom() {
-    return JSON.parse(localStorage.getItem(currentRoomKey)) || [];
+  function addUser(value) {
+    localStorage.setItem(currentUserKey, value);
+  }
+  function addRoom(value) {
+    localStorage.setItem(currentRoomKey, value);
   }
 
-  function addRoom(name) {
-    const room = getRoom();
-    room.push(name);
-    localStorage.setItem(currentRoomKey, name);
-  }
 
-  function isNameTaken(name) {
-    return getUsers().includes(name);
-  }
 
   // 准备连接web socket
   const socket = io('https://ts-ke8i.onrender.com');
@@ -355,8 +334,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const room = roomInput.value.trim();
     if (!name || !room) {
       loginError.textContent = '用户名和房间号都不能为空';
-    } else if (isNameTaken(name)) {
-      loginError.textContent = '该用户名已存在，请换一个';
     } else {
       addUser(name);
       addRoom(room);
